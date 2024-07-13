@@ -1,5 +1,3 @@
-export type ApiStatus = 'IDLE' | 'PENDING' | 'SUCCESS' | 'ERROR';
-
 export interface IUserDataProps {
   id: number
   name: string

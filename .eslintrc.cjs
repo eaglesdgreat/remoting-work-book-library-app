@@ -26,5 +26,6 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    // '@typescript-eslint/no-unsafe-member-access': 'off',
   },
 };
