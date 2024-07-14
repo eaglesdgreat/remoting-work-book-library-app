@@ -5,32 +5,45 @@ import {
   PENDING,
   SUCCESS,
 } from 'api/constants/api.status.constant';
-import { ApiStatus } from "api/types/api.status.type"
+import { useApiStatus } from 'api/hooks/api.status.hook'
 
 import { registerUser } from 'services/auth.service';
 import { useState } from 'react';
 
 export const useRegisterUser = () => {
   const [user, setUser] = useState<IAuthResponseProps>();
-  const [apiStatus, setApiStatus] = useState<ApiStatus>(IDLE);
+
+  const {
+    status: registerStatus,
+    setStatus: setRegisterStatus,
+    isIdle: isRegisterStatusIdle,
+    isPending: isRegisterStatusPending,
+    isError: isRegisterStatusError,
+    isSuccess: isRegisterStatusSuccess,
+    } = useApiStatus(IDLE)
 
   const initRegisterUser = async (payload: IRegisterProps) => {
-    setApiStatus(PENDING);
+    setRegisterStatus(PENDING);
 
     const {response, error} = await registerUser(payload);
 
     if (error) {
-      setApiStatus(ERROR)
+      setRegisterStatus(ERROR)
     } else if (response) {
       setUser(response.data);
       
-      setApiStatus(SUCCESS);
+      setRegisterStatus(SUCCESS);
     }
   }
 
   return {
     user,
-    apiStatus,
-    initRegisterUser
+    setRegisterStatus,
+    initRegisterUser,
+    registerStatus,
+    isRegisterStatusIdle,
+    isRegisterStatusPending,
+    isRegisterStatusError,
+    isRegisterStatusSuccess,
   }
 }

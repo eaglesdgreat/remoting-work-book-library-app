@@ -1,6 +1,7 @@
+import { ILoginProps, IRegisterProps } from 'types/api.type'
+import { getUserSession, login, logout, register } from 'api/auth.api';
+
 import { withAsync } from 'helpers/withAsync';
-import { login, logout, register, getUserSession } from 'api/auth.api';
-import { IRegisterProps, ILoginProps } from 'types/api.type'
 
 export async function registerUser(payload: IRegisterProps) {
   const { response, error } = await withAsync(() => register(payload));

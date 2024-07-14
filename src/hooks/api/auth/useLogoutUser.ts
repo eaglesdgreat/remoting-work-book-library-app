@@ -4,27 +4,38 @@ import {
   PENDING,
   SUCCESS,
 } from 'api/constants/api.status.constant';
-import { ApiStatus } from "api/types/api.status.type"
 import { logoutUser } from 'services/auth.service';
-import { useState } from 'react';
+import { useApiStatus } from 'api/hooks/api.status.hook'
 
 export const useLogoutUser = () => {
-  const [apiStatus, setApiStatus] = useState<ApiStatus>(IDLE);
+  const {
+    status: logoutStatus,
+    setStatus: setLogoutStatus,
+    isIdle: isLogoutStatusIdle,
+    isPending: isLogoutStatusPending,
+    isError: isLogoutStatusError,
+    isSuccess: isLogoutStatusSuccess,
+    } = useApiStatus(IDLE)
 
   const initLogoutUser = async () => {
-    setApiStatus(PENDING);
+    setLogoutStatus(PENDING);
 
     const {response, error} = await logoutUser();
 
     if (error) {
-      setApiStatus(ERROR)
+      setLogoutStatus(ERROR)
     } else if (response) {
-      setApiStatus(SUCCESS);
+      setLogoutStatus(SUCCESS);
     }
   }
 
   return {
-    apiStatus,
-    initLogoutUser
+    setLogoutStatus,
+    initLogoutUser,
+    logoutStatus,
+    isLogoutStatusIdle,
+    isLogoutStatusPending,
+    isLogoutStatusError,
+    isLogoutStatusSuccess,
   }
 }
