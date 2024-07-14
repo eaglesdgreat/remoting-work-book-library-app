@@ -1,4 +1,4 @@
-import { ILoginProps, IRegisterProps } from 'types/api.type'
+import { ILoginProps, IRegisterProps } from 'types'
 import { getUserSession, login, logout, register } from 'api/auth.api';
 
 import { withAsync } from 'helpers/withAsync';

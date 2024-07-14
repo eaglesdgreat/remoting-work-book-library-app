@@ -4,7 +4,7 @@ import {
   PENDING,
   SUCCESS,
 } from 'api/constants/api.status.constant';
-import { IAuthResponseProps, ILoginProps } from "types/api.type"
+import { IAuthResponseProps, ILoginProps } from "types"
 import { loginUser } from 'services/auth.service';
 import { useState } from 'react';
 import { useApiStatus } from 'api/hooks/api.status.hook'

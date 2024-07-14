@@ -1,4 +1,4 @@
-import { IAuthResponseProps, IRegisterProps } from "types/api.type"
+import { IAuthResponseProps, IRegisterProps } from "types"
 import {
   ERROR,
   IDLE,

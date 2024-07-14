@@ -1,4 +1,4 @@
-import { ApiStatus, ApiStatuses } from "../types/api.status.type";
+import { ApiStatus, ApiStatuses } from "../types/api.type";
 
 export const IDLE: ApiStatus = 'IDLE'
 export const PENDING: ApiStatus = 'PENDING'

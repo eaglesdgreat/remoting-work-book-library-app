@@ -21,3 +21,12 @@ export interface IRegisterProps {
 }
 
 export type ILoginProps = Pick<IRegisterProps, 'email' | 'password'>;
+
+export interface GlobalContextValue {
+  isSpinnerVisible: boolean;
+  user: IUserDataProps;
+}
+
+export interface GlobalContextProviderProps {
+  children: React.ReactNode
+}

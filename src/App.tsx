@@ -3,12 +3,13 @@ import './App.css';
 import reactLogo from './assets/react.svg';
 import { useState } from 'react';
 import viteLogo from '/vite.svg';
+import GlobalContextProvider from 'context/GlobalContext'
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
+    <GlobalContextProvider>
       <div>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -29,7 +30,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-    </>
+    </GlobalContextProvider>
   );
 }
 
