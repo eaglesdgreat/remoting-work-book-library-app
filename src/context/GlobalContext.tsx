@@ -1,11 +1,11 @@
 import React from 'react'
-import Spinner from 'components/LazyLoader';
-import { GlobalContextValue, GlobalContextProviderProps } from 'types';
+import Spinner from '@/components/LazyLoader';
+import { GlobalContextValue, GlobalContextProviderProps } from '@/types';
 import { ToastContainer } from 'react-toastify'
 import { useImmerReducer } from 'use-immer'
 import { contextFactory } from './helpers/contextFactory'
-import { reducer } from 'reducers/global.reducer'
-import { GlobalItemState, GlobalItemActions } from 'reducers/types/reducer.type'
+import { reducer } from '@/reducers/global.reducer'
+import { GlobalItemState, GlobalItemActions } from '@/reducers/types/reducer.type'
 
 const [
   GlobalContext,

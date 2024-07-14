@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { didAbort } from 'api/api'
+import { didAbort } from '@/api/api'
 
 export const handleAppError = (error: unknown) => {
   if (didAbort(error)) {

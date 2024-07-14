@@ -1,35 +1,37 @@
-import './App.css';
-
-import reactLogo from './assets/react.svg';
-import { useState } from 'react';
-import viteLogo from '/vite.svg';
-import GlobalContextProvider from 'context/GlobalContext'
+// import { useState } from 'react';
+// @ts-expect-error using alias as import so not an error
+import GlobalContextProvider from '@/context/GlobalContext'; 
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+// @ts-expect-error using alias as import so not an error
+import Login from '@/views/auth/Login'
+// @ts-expect-error using alias as import so not an error
+import Register from '@/views/auth/Register'
+// import Dashboard from 'views/dashboard/Dashboard'
 
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
   return (
     <GlobalContextProvider>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p className="text-4xl text-blue-500">
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <div className="App mx-auto max-w-6xl text-center my-8">
+          <h1 className="font-semibold text-2xl">
+            React - The Road To Enterprise
+          </h1>
+          <nav className="my-8 space-x-4">
+            <Link to="/">Dashboard</Link>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </nav>
+          <div>
+            <Routes>
+              {/* <Route path="/" element={<Dashboard />} /> */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </div>
+        </div>
+      </BrowserRouter>
     </GlobalContextProvider>
   );
 }

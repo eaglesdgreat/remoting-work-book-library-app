@@ -1,4 +1,4 @@
-import { IAuthResponseProps, IRegisterProps, ILoginProps } from 'types'
+import { IAuthResponseProps, IRegisterProps, ILoginProps } from '@/types'
 
 import api from './api';
 
