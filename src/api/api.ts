@@ -13,7 +13,7 @@ import {
 // Default config for the axios instance
 const axiosParams = {
   // Set different base URL based on the environment
-  baseURL: process.env.REACT_APP_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_URL,
 };
 
 // Create axios instance with default params

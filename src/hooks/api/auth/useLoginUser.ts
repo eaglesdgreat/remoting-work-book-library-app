@@ -3,46 +3,56 @@ import {
   IDLE,
   PENDING,
   SUCCESS,
-} from 'api/constants/api.status.constant';
-import { IAuthResponseProps, ILoginProps } from "types"
-import { loginUser } from 'services/auth.service';
-import { useState } from 'react';
-import { useApiStatus } from 'api/hooks/api.status.hook'
+} from '../../../api/constants/api.status.constant';
+import { ILoginProps } from "types"
+import { toast } from 'react-toastify'
+// @ts-expect-error using alias as import so not an error
+import { handleAppError } from '@/helpers/handleAppError'
+
+// @ts-expect-error using alias as import so not an error
+import { loginUser } from '@/services/auth.service';
+// @ts-expect-error using alias as import so not an error
+import { useApiStatus } from '@/api/hooks/api.status.hook'
+// @ts-expect-error using alias as import so not an error
+import { useGlobalContextSelector } from '@/context/GlobalContext'
 
 export const useLoginUser = () => {
-  const [user, setUser] = useState<IAuthResponseProps>();
+  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
 
   const {
-    status: loginStatus,
-    setStatus: setLoginStatus,
-    isIdle: isLoginStatusIdle,
-    isPending: isLoginStatusPending,
-    isError: isLoginStatusError,
-    isSuccess: isLoginStatusSuccess,
-    } = useApiStatus(IDLE)
+    setStatusWithCallback: setLoginStatus,
+  } = useApiStatus(IDLE);
 
-  const initLoginUser = async (payload: ILoginProps) => {
-    setLoginStatus(PENDING);
+  const toggleSpinner = (show: boolean) => {
+    dispatch({
+      type: 'TOGGLE_SPINNER',
+      payload: {
+        show
+      }
+    })
+  }
+
+  return async (payload: ILoginProps) => {
+    setLoginStatus(PENDING, (show) => {
+      toggleSpinner(show);
+    });
 
     const {response, error} = await loginUser(payload);
 
     if (error) {
-      setLoginStatus(ERROR)
+      setLoginStatus(ERROR, (show) => {
+        toggleSpinner(show);
+      })
+
+      handleAppError(error.message)
     } else if (response) {
-      setUser(response.data);
+      setLoginStatus(SUCCESS, (show) => {
+        toggleSpinner(show);
+      });
 
-      setLoginStatus(SUCCESS);
+      toast.success('Welcome back!')
+
+      return response.data
     }
-  }
-
-  return {
-    user,
-    setLoginStatus,
-    initLoginUser,
-    loginStatus,
-    isLoginStatusIdle,
-    isLoginStatusPending,
-    isLoginStatusError,
-    isLoginStatusSuccess,
   }
 }

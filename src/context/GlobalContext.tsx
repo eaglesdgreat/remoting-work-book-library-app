@@ -1,10 +1,11 @@
 import React from 'react'
-import Spinner from '@/components/LazyLoader';
+// @ts-expect-error using alias as import so not an error
 import { GlobalContextValue, GlobalContextProviderProps } from '@/types';
-import { ToastContainer } from 'react-toastify'
 import { useImmerReducer } from 'use-immer'
 import { contextFactory } from './helpers/contextFactory'
+// @ts-expect-error using alias as import so not an error
 import { reducer } from '@/reducers/global.reducer'
+// @ts-expect-error using alias as import so not an error
 import { GlobalItemState, GlobalItemActions } from '@/reducers/types/reducer.type'
 
 const [
@@ -32,11 +33,7 @@ const GlobalContextProvider = (props: GlobalContextProviderProps) => {
 
   return (
     <GlobalContext.Provider value={[globalData, dispatch]}>
-      <ToastContainer />
-
-      {props.children}
-    
-      <Spinner show={false} />
+      {props.children}    
     </GlobalContext.Provider>
   )
 }

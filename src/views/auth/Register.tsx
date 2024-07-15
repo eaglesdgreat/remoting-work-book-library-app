@@ -1,4 +1,10 @@
-import { useState } from 'react';
+// @ts-expect-error using alias as import so not an error
+import { useGlobalContextSelector } from '@/context/GlobalContext'
+import React, { useState } from 'react';
+// @ts-expect-error using alias as import so not an error
+import { useRegisterUser } from '@/hooks/api/auth/useRegisterUser'
+import { IAuthResponseProps } from "types"
+import { useNavigate } from "react-router-dom";
 
 const RegistrationForm = () => {
   const [name, setName] = useState('');
@@ -7,22 +13,48 @@ const RegistrationForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
+  const initRegisterUser = useRegisterUser();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission logic (e.g., send registration data to backend)
-    if (password !== confirmPassword) {
-      alert('Passwords do not match!');
-      return;
+
+    try {
+      const response = await initRegisterUser({
+        email,
+        password,
+        username,
+        name,
+        password_confirmation: confirmPassword
+      }) as IAuthResponseProps;
+
+
+      if (response.token) {
+        dispatch({
+          type: 'ADD_USER',
+          payload: response.data
+        })
+
+        dispatch({
+          type: 'ADD_TOKEN',
+          payload: response.token
+        })
+
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+
+        return navigate('/');
+      }
+    } catch(e) {
+      // Nothing to catch
     }
-    console.log('Username:', username, 'Email:', email, 'Password:', password);
-    setUsername('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex items-start justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-center">Create Your Account</h1>
@@ -31,7 +63,7 @@ const RegistrationForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex flex-col space-y-1">
-            <label htmlFor="username" className="text-sm font-medium text-gray-700">Name</label>
+            <label htmlFor="username" className="text-sm font-medium text-gray-700 text-left">Name</label>
             <input
               id="name"
               type="text"
@@ -43,7 +75,7 @@ const RegistrationForm = () => {
           </div>
 
           <div className="flex flex-col space-y-1">
-            <label htmlFor="username" className="text-sm font-medium text-gray-700">Username</label>
+            <label htmlFor="username" className="text-sm font-medium text-gray-700 text-left">Username</label>
             <input
               id="username"
               type="text"
@@ -55,7 +87,7 @@ const RegistrationForm = () => {
           </div>
 
           <div className="flex flex-col space-y-1">
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="text-sm font-medium text-gray-700 text-left">Email</label>
             <input
               id="email"
               type="email"
@@ -67,7 +99,7 @@ const RegistrationForm = () => {
           </div>
 
           <div className="flex flex-col space-y-1">
-            <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="text-sm font-medium text-gray-700 text-left">Password</label>
             <input
               id="password"
               type="password"
@@ -79,7 +111,7 @@ const RegistrationForm = () => {
           </div>
 
           <div className="flex flex-col space-y-1">
-            <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">Confirm Password</label>
+            <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700 text-left">Confirm Password</label>
             <input
               id="confirmPassword"
               type="password"

@@ -5,6 +5,7 @@ const BookListing = () => {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('title'); // Default sort by title
+  const [filters, setFilters] = useState({ genre: '' }); // Add initial filter state
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
@@ -16,6 +17,7 @@ const BookListing = () => {
         q: searchTerm, // Search term
         sort: sortBy, // Sort by field
         page: currentPage, // Current page number
+        ...filters, // Include filter params
       };
       const response = await axios.get('/api/books', { params }); // Replace '/api/books' with your actual endpoint
       setBooks(response.data.books);
@@ -23,7 +25,7 @@ const BookListing = () => {
     };
 
     fetchBooks();
-  }, [searchTerm, sortBy, currentPage]);
+  }, [searchTerm, sortBy, currentPage, filters]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -32,6 +34,10 @@ const BookListing = () => {
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
+  };
+
+  const handleFilterChange = (e) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value }); // Update specific filter
   };
 
   const handleLoadMore = async () => {
@@ -55,6 +61,16 @@ const BookListing = () => {
             <option value="title">Title</option>
             <option value="author">Author</option>
           </select>
+          <div className="ml-4">
+            <label htmlFor="genre">Genre:</label>
+            <select id="genre" name="genre" value={filters.genre} onChange={handleFilterChange} className="border border-gray-300 rounded-md px-3 py-2">
+              <option value="">All</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="sci-fi">Sci-Fi</option>
+              <option value="mystery">Mystery</option>
+              {/* Add more options as needed */}
+            </select>
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -70,6 +86,7 @@ const BookListing = () => {
     </div>
   );
 };
+
 
 const BookCard = ({ title, author, image }) => (
   <div className="rounded-md border border-gray-300 shadow-sm p-4">

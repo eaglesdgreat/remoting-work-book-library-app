@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { IDLE, defaultApiStatuses } from '../constants/api.status.constant'
 import { ApiStatus } from "../types/api.type";
 
@@ -21,13 +21,30 @@ const prepareStatuses = (currentStatus: ApiStatus): Statuses => {
 }
 
 export const useApiStatus = (currentStatus: ApiStatus = IDLE) => {
+  const callbackRef = useRef<null | Function>(null);
+
   const [status, setStatus] = useState<ApiStatus>(currentStatus)
 
   const statuses = useMemo(() => prepareStatuses(status), [status])
 
+  useEffect(() => {
+    if (callbackRef.current) {
+      setTimeout(() => {
+        callbackRef.current?.(statuses.isPending);
+        callbackRef.current = null;
+      }, 1000);
+    }
+  }, [status, statuses]);
+
+
+  const setStatusWithCallback = useCallback((newValue, callback) => {
+    callbackRef.current = callback;
+    setStatus(newValue);
+  }, []);
+
   return {
     status,
-    setStatus,
+    setStatusWithCallback,
     ...statuses,
   }
 }

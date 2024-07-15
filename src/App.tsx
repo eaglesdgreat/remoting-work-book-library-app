@@ -1,38 +1,55 @@
-// import { useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Login from './views/auth/Login'
+import Register from './views/auth/Register'
+import BookListing from './views/books/BookListing'
+import AuthLayout from './layout/AuthLayout'
+import DashboardLayout from './layout/DashboardLayout'
+import { ToastContainer } from 'react-toastify'
 // @ts-expect-error using alias as import so not an error
-import GlobalContextProvider from '@/context/GlobalContext'; 
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import Spinner from '@/components/LazyLoader';
 // @ts-expect-error using alias as import so not an error
-import Login from '@/views/auth/Login'
-// @ts-expect-error using alias as import so not an error
-import Register from '@/views/auth/Register'
-// import Dashboard from 'views/dashboard/Dashboard'
+import { useGlobalContextSelector } from '@/context/GlobalContext'
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  // const [count, setCount] = useState(0);
+  const globalItem = useGlobalContextSelector((ctx) => ctx[0]);
 
   return (
-    <GlobalContextProvider>
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        // transition: Bounce
+      />
+
       <BrowserRouter>
         <div className="App mx-auto max-w-6xl text-center my-8">
-          <h1 className="font-semibold text-2xl">
-            React - The Road To Enterprise
-          </h1>
-          <nav className="my-8 space-x-4">
-            <Link to="/">Dashboard</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </nav>
           <div>
-            <Routes>
-              {/* <Route path="/" element={<Dashboard />} /> */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Routes>
+                <Route element={<DashboardLayout />}>
+                <Route path="/books" element={<BookListing />} />
+              </Route>
+
+              <Route element={<AuthLayout />}>
+                <Route path="/" element={<BookListing />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+              </Route>
             </Routes>
           </div>
         </div>
       </BrowserRouter>
-    </GlobalContextProvider>
+
+      <Spinner show={globalItem.isSpinnerVisible} />
+    </>
   );
 }
 

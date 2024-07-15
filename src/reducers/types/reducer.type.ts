@@ -14,3 +14,5 @@ export interface ReducerAction<T, P> {
 export type GlobalItemActions =
   | ReducerAction<'ADD_USER', IUserDataProps>
   | ReducerAction<'TOGGLE_SPINNER', {show: boolean}>
+  | ReducerAction<'ADD_TOKEN', string>
+  | ReducerAction<'REMOVE_TOKEN', string>

@@ -1,49 +1,58 @@
-import { IAuthResponseProps, IRegisterProps } from "types"
+import { IRegisterProps } from "types"
 import {
   ERROR,
   IDLE,
   PENDING,
   SUCCESS,
-} from 'api/constants/api.status.constant';
-import { useApiStatus } from 'api/hooks/api.status.hook'
-
-import { registerUser } from 'services/auth.service';
-import { useState } from 'react';
+} from '../../../api/constants/api.status.constant';
+import { useApiStatus } from '../../../api/hooks/api.status.hook'
+import { toast } from 'react-toastify'
+// @ts-expect-error using alias as import so not an error
+import { handleAppError } from '@/helpers/handleAppError'
+// @ts-expect-error using alias as import so not an error
+import { registerUser } from '@/services/auth.service';
+// @ts-expect-error using alias as import so not an error
+import { useGlobalContextSelector } from '@/context/GlobalContext'
 
 export const useRegisterUser = () => {
-  const [user, setUser] = useState<IAuthResponseProps>();
+  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
 
   const {
-    status: registerStatus,
-    setStatus: setRegisterStatus,
-    isIdle: isRegisterStatusIdle,
-    isPending: isRegisterStatusPending,
-    isError: isRegisterStatusError,
-    isSuccess: isRegisterStatusSuccess,
-    } = useApiStatus(IDLE)
+    setStatusWithCallback: setRegisterStatus,
+  } = useApiStatus(IDLE);
 
-  const initRegisterUser = async (payload: IRegisterProps) => {
-    setRegisterStatus(PENDING);
+  const toggleSpinner = (show: boolean) => {
+    dispatch({
+      type: 'TOGGLE_SPINNER',
+      payload: {
+        show
+      }
+    })
+  }
+
+  return async (payload: IRegisterProps) => {
+    setRegisterStatus(PENDING, (show) => {
+      toggleSpinner(show);
+    });
 
     const {response, error} = await registerUser(payload);
 
-    if (error) {
-      setRegisterStatus(ERROR)
-    } else if (response) {
-      setUser(response.data);
-      
-      setRegisterStatus(SUCCESS);
-    }
-  }
+    console.log('data', response, error)
 
-  return {
-    user,
-    setRegisterStatus,
-    initRegisterUser,
-    registerStatus,
-    isRegisterStatusIdle,
-    isRegisterStatusPending,
-    isRegisterStatusError,
-    isRegisterStatusSuccess,
+    if (error) {
+      setRegisterStatus(ERROR, (show) => {
+        toggleSpinner(show);
+      })
+
+      handleAppError(error.message)
+    } else if (response) {      
+      setRegisterStatus(SUCCESS, (show) => {
+        toggleSpinner(show);
+      });
+
+      toast.success('Account created!')
+
+      return response.data;
+    }
   }
 }
