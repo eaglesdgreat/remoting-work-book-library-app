@@ -1,9 +1,10 @@
 // @ts-expect-error using alias as import so not an error
-import { useGlobalContextSelector } from '@/context/GlobalContext'
+import GlobalContextProvider from '@/context/GlobalContext'
 import React, { useState } from 'react';
 // @ts-expect-error using alias as import so not an error
 import { useLoginUser } from '@/hooks/api/auth/useLoginUser'
-import { IAuthResponseProps } from "types"
+// @ts-expect-error using alias as import so not an error
+import { IAuthResponseProps, Types } from "@/types"
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
@@ -11,7 +12,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
-  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
+  const dispatch = GlobalContextProvider.useGlobalContextSelector((ctx) => ctx[1]);
   const initLoginUser = useLoginUser();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,13 +24,18 @@ const LoginForm = () => {
 
       if (response.token) {
         dispatch({
-          type: 'ADD_USER',
+          type: Types.AddUser,
           payload: response.data
         })
 
         dispatch({
-          type: 'ADD_TOKEN',
+          type: Types.AddToken,
           payload: response.token
+        })
+
+        dispatch({
+          type: Types.GetToken,
+          payload: 'token'
         })
 
         setEmail('')

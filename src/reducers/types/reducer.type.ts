@@ -1,4 +1,4 @@
-import { GlobalContextValue, IUserDataProps } from 'types';
+import { GlobalContextValue, IBookResponseProps, IUserDataProps, Types } from 'types';
 
 export type GlobalItemState = GlobalContextValue
 
@@ -6,13 +6,25 @@ export type ToggleSpinner = (payload: {show: boolean}) => void
 
 export type AddUser = (payload: {user: IUserDataProps}) => void
 
-export interface ReducerAction<T, P> {
-  type: T
-  payload: P
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type ActionMap<M extends Record<string, any>> = {
+  [Key in keyof M]: M[Key] extends undefined
+    ? {
+        type: Key;
+      }
+    : {
+        type: Key;
+        payload: M[Key];
+      }
+};
+
+interface GlobalItemPayload {
+  [Types.AddUser] : IUserDataProps
+  [Types.Spinner] : {show: boolean}
+  [Types.AddToken]: string
+  [Types.RemoveToken]: string
+  [Types.GetToken]: string
+  [Types.AddBooks]: IBookResponseProps[]
 }
 
-export type GlobalItemActions =
-  | ReducerAction<'ADD_USER', IUserDataProps>
-  | ReducerAction<'TOGGLE_SPINNER', {show: boolean}>
-  | ReducerAction<'ADD_TOKEN', string>
-  | ReducerAction<'REMOVE_TOKEN', string>
+export type GlobalItemActions = ActionMap<GlobalItemPayload>[keyof ActionMap<GlobalItemPayload>];

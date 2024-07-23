@@ -1,15 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+// @ts-expect-error using alias as import so not an error
+import { IBookResponseProps } from '@/types'
 import axios from 'axios';
 
 const BookListing = () => {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<IBookResponseProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('title'); // Default sort by title
   const [filters, setFilters] = useState({ genre: '' }); // Add initial filter state
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const PER_PAGE = 10; // Number of books per page
+  // const PER_PAGE = 20; // Number of books per page
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -24,7 +27,7 @@ const BookListing = () => {
       setHasMore(response.data.hasMore);
     };
 
-    fetchBooks();
+    void fetchBooks();
   }, [searchTerm, sortBy, currentPage, filters]);
 
   const handleSearch = (e) => {
@@ -40,7 +43,7 @@ const BookListing = () => {
     setFilters({ ...filters, [e.target.name]: e.target.value }); // Update specific filter
   };
 
-  const handleLoadMore = async () => {
+  const handleLoadMore = () => {
     const nextPage = currentPage + 1;
     setCurrentPage(nextPage);
   };

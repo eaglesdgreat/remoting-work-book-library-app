@@ -14,7 +14,7 @@ const [
   useGlobalContextSelector,
 ] = contextFactory<[GlobalItemState, React.Dispatch<GlobalItemActions>]>()
 
-export { useGlobalContext, useGlobalContextSelector }
+// export { useGlobalContext, useGlobalContextSelector }
 
 const globalItems: GlobalContextValue = {
   isSpinnerVisible: false,
@@ -25,7 +25,9 @@ const globalItems: GlobalContextValue = {
     username: '',
     created_at: '',
     updated_at: ''
-  }
+  },
+  books: [],
+  token: "",
 }
 
 const GlobalContextProvider = (props: GlobalContextProviderProps) => {
@@ -37,5 +39,8 @@ const GlobalContextProvider = (props: GlobalContextProviderProps) => {
     </GlobalContext.Provider>
   )
 }
+
+GlobalContextProvider.useGlobalContext = useGlobalContext;
+GlobalContextProvider.useGlobalContextSelector = useGlobalContextSelector;
 
 export default GlobalContextProvider;

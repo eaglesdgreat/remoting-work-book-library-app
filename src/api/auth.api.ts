@@ -1,3 +1,4 @@
+// @ts-expect-error using alias as import so not an error
 import { IAuthResponseProps, IRegisterProps, ILoginProps } from '@/types'
 
 import api from './api';

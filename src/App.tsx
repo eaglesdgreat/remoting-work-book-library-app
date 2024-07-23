@@ -8,11 +8,11 @@ import { ToastContainer } from 'react-toastify'
 // @ts-expect-error using alias as import so not an error
 import Spinner from '@/components/LazyLoader';
 // @ts-expect-error using alias as import so not an error
-import { useGlobalContextSelector } from '@/context/GlobalContext'
+import GlobalContextProvider from '@/context/GlobalContext'
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const globalItem = useGlobalContextSelector((ctx) => ctx[0]);
+  const globalItem = GlobalContextProvider.useGlobalContextSelector((ctx) => ctx[0]);
 
   return (
     <>
@@ -39,9 +39,9 @@ function App() {
               </Route>
 
               <Route element={<AuthLayout />}>
-                <Route path="/" element={<BookListing />} />
+                {/* <Route path="/" element={<BookListing />} /> */}
                 <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                <Route path="/" element={<Register />} />
               </Route>
             </Routes>
           </div>

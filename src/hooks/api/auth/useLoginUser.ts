@@ -4,7 +4,8 @@ import {
   PENDING,
   SUCCESS,
 } from '../../../api/constants/api.status.constant';
-import { ILoginProps } from "types"
+// @ts-expect-error using alias as import so not an error
+import { ILoginProps, Types } from "@/types"
 import { toast } from 'react-toastify'
 // @ts-expect-error using alias as import so not an error
 import { handleAppError } from '@/helpers/handleAppError'
@@ -14,10 +15,10 @@ import { loginUser } from '@/services/auth.service';
 // @ts-expect-error using alias as import so not an error
 import { useApiStatus } from '@/api/hooks/api.status.hook'
 // @ts-expect-error using alias as import so not an error
-import { useGlobalContextSelector } from '@/context/GlobalContext'
+import GlobalContextProvider from '@/context/GlobalContext'
 
 export const useLoginUser = () => {
-  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
+  const dispatch = GlobalContextProvider.useGlobalContextSelector((ctx) => ctx[1]);
 
   const {
     setStatusWithCallback: setLoginStatus,
@@ -25,7 +26,7 @@ export const useLoginUser = () => {
 
   const toggleSpinner = (show: boolean) => {
     dispatch({
-      type: 'TOGGLE_SPINNER',
+      type: Types.Spinner,
       payload: {
         show
       }
@@ -33,7 +34,7 @@ export const useLoginUser = () => {
   }
 
   return async (payload: ILoginProps) => {
-    setLoginStatus(PENDING, (show) => {
+    await setLoginStatus(PENDING, (show) => {
       toggleSpinner(show);
     });
 

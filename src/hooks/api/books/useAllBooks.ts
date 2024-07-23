@@ -1,26 +1,27 @@
-// @ts-expect-error using alias as import so not an error
-import { IRegisterProps, Types } from "@/types"
 import {
   ERROR,
   IDLE,
   PENDING,
   SUCCESS,
-} from '../../../api/constants/api.status.constant';
-import { useApiStatus } from '../../../api/hooks/api.status.hook'
+// @ts-expect-error using alias as import so not an error
+} from '@/api/constants/api.status.constant';
 import { toast } from 'react-toastify'
 // @ts-expect-error using alias as import so not an error
 import { handleAppError } from '@/helpers/handleAppError'
 // @ts-expect-error using alias as import so not an error
-import { registerUser } from '@/services/auth.service';
+import { PaginationParamsProps, Types } from '@/types'
+// @ts-expect-error using alias as import so not an error
+import { useApiStatus } from '@/api/hooks/api.status.hook'
 // @ts-expect-error using alias as import so not an error
 import GlobalContextProvider from '@/context/GlobalContext'
-// import { useGlobalContextSelector } from '@/context/GlobalContext'
+// @ts-expect-error using alias as import so not an error
+import { getAllBooksService } from '@/services/books.service';
 
-export const useRegisterUser = () => {
+export const useAllBooks = () => {
   const dispatch = GlobalContextProvider.useGlobalContextSelector((ctx) => ctx[1]);
 
   const {
-    setStatusWithCallback: setRegisterStatus,
+    setStatusWithCallback: setBookStatus,
   } = useApiStatus(IDLE);
 
   const toggleSpinner = (show: boolean) => {
@@ -32,29 +33,27 @@ export const useRegisterUser = () => {
     })
   }
 
-  return async (payload: IRegisterProps) => {
-    setRegisterStatus(PENDING, (show) => {
+  return async (params: PaginationParamsProps) => {
+    setBookStatus(PENDING, (show) => {
       toggleSpinner(show);
     });
 
-    const {response, error} = await registerUser(payload);
-
-    console.log('data', response, error)
+    const {response, error} = await getAllBooksService(params);
 
     if (error) {
-      setRegisterStatus(ERROR, (show) => {
+      setBookStatus(ERROR, (show) => {
         toggleSpinner(show);
       })
 
       handleAppError(error.message)
-    } else if (response) {      
-      setRegisterStatus(SUCCESS, (show) => {
+    } else if (response) {
+      setBookStatus(SUCCESS, (show) => {
         toggleSpinner(show);
       });
 
-      toast.success('Account created!')
+      toast.success('Welcome back!')
 
-      return response.data;
+      return response.data
     }
   }
 }
