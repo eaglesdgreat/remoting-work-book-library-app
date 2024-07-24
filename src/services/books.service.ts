@@ -1,8 +1,7 @@
 // @ts-expect-error using alias as import so not an error
 import { PaginationParamsProps } from '@/types';
-import {
-  getAllPaginatedBooks
-} from 'api/books.api';
+// @ts-expect-error using alias as import so not an error
+import { getAllPaginatedBooks } from '@/api/books.api';
 // @ts-expect-error using alias as import so not an error
 import { withAsync } from '@/helpers/withAsync';
 

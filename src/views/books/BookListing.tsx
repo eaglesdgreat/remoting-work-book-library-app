@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-
 // @ts-expect-error using alias as import so not an error
-import { IBookResponseProps } from '@/types'
-import axios from 'axios';
+import { useGlobalContextSelector } from '@/context/GlobalContext'
+// @ts-expect-error using alias as import so not an error
+// import { IBookResponseProps } from '@/types'
 
 const BookListing = () => {
-  const [books, setBooks] = useState<IBookResponseProps[]>([]);
+  const { books } = useGlobalContextSelector((ctx) => ctx[0]);
+
+  // const [books, setBooks] = useState<IBookResponseProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('title'); // Default sort by title
   const [filters, setFilters] = useState({ genre: '' }); // Add initial filter state
@@ -15,19 +17,19 @@ const BookListing = () => {
   // const PER_PAGE = 20; // Number of books per page
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      const params = {
-        q: searchTerm, // Search term
-        sort: sortBy, // Sort by field
-        page: currentPage, // Current page number
-        ...filters, // Include filter params
-      };
-      const response = await axios.get('/api/books', { params }); // Replace '/api/books' with your actual endpoint
-      setBooks(response.data.books);
-      setHasMore(response.data.hasMore);
-    };
+    // const fetchBooks = async () => {
+    //   const params = {
+    //     q: searchTerm, // Search term
+    //     sort: sortBy, // Sort by field
+    //     page: currentPage, // Current page number
+    //     ...filters, // Include filter params
+    //   };
+    //   const response = await axios.get('/api/books', { params }); // Replace '/api/books' with your actual endpoint
+    //   setBooks(response.data.books);
+    //   setHasMore(response.data.hasMore);
+    // };
 
-    void fetchBooks();
+    // void fetchBooks();
   }, [searchTerm, sortBy, currentPage, filters]);
 
   const handleSearch = (e) => {

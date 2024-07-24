@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AuthLayout from './layout/AuthLayout'
 import BookListing from './views/books/BookListing'
 import DashboardLayout from './layout/DashboardLayout'
+import Home from './views/Home'
 import Login from './views/auth/Login'
 import Register from './views/auth/Register'
 // @ts-expect-error using alias as import so not an error
@@ -37,13 +38,14 @@ function App() {
           <div>
               <Routes>
                 <Route element={<DashboardLayout />}>
-                <Route path="/books" element={<BookListing />} />
+                {/* <Route path="/books" element={<BookListing />} /> */}
               </Route>
 
               <Route element={<AuthLayout />}>
-                {/* <Route path="/" element={<BookListing />} /> */}
+                <Route path="/" element={<Home />} />
+                <Route path="/books" element={<BookListing />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/" element={<Register />} />
+                <Route path="/register" element={<Register />} />
               </Route>
             </Routes>
           </div>
