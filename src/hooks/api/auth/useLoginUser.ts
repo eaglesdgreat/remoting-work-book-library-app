@@ -6,19 +6,19 @@ import {
 } from '../../../api/constants/api.status.constant';
 // @ts-expect-error using alias as import so not an error
 import { ILoginProps, Types } from "@/types"
-import { toast } from 'react-toastify'
-// @ts-expect-error using alias as import so not an error
-import { handleAppError } from '@/helpers/handleAppError'
 
 // @ts-expect-error using alias as import so not an error
+import { handleAppError } from '@/helpers/handleAppError'
+// @ts-expect-error using alias as import so not an error
 import { loginUser } from '@/services/auth.service';
+import { toast } from 'react-toastify'
 // @ts-expect-error using alias as import so not an error
 import { useApiStatus } from '@/api/hooks/api.status.hook'
 // @ts-expect-error using alias as import so not an error
-import GlobalContextProvider from '@/context/GlobalContext'
+import { useGlobalContextSelector } from '@/context/GlobalContext'
 
 export const useLoginUser = () => {
-  const dispatch = GlobalContextProvider.useGlobalContextSelector((ctx) => ctx[1]);
+  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
 
   const {
     setStatusWithCallback: setLoginStatus,

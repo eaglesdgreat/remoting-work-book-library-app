@@ -1,16 +1,16 @@
-import { GlobalItemState, GlobalItemActions } from './types/reducer.type'
+import { GlobalItemActions, GlobalItemState } from './types/reducer.type'
 // @ts-expect-error using alias as import so not an error
-import { Types, IUserDataProps, IBookResponseProps } from '@/types';
+import { IBookResponseProps, IUserDataProps, Types } from '@/types';
 
 export const reducer = (state: GlobalItemState, action: GlobalItemActions): GlobalItemState => {
   switch (action.type) {
     case Types.AddUser:
       state.user = action.payload as IUserDataProps
-      return { ...state };
+      break;
 
     case Types.Spinner:
       state.isSpinnerVisible = (action.payload as { show: boolean }).show;
-      return { ...state };
+      break;
 
     case Types.AddToken:
       window.localStorage.setItem('token', action.payload as string)
@@ -22,11 +22,11 @@ export const reducer = (state: GlobalItemState, action: GlobalItemActions): Glob
 
     case Types.GetToken:
       state.token = window.localStorage.getItem(action.payload as string);
-      return { ...state };
+      break;
 
     case Types.AddBooks:
       state.books = action.payload as IBookResponseProps[]
-      return { ...state };
+      break;
   }
 
   return state

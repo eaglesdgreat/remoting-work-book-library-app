@@ -1,18 +1,20 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Login from './views/auth/Login'
-import Register from './views/auth/Register'
-import BookListing from './views/books/BookListing'
-import AuthLayout from './layout/AuthLayout'
-import DashboardLayout from './layout/DashboardLayout'
-import { ToastContainer } from 'react-toastify'
-// @ts-expect-error using alias as import so not an error
-import Spinner from '@/components/LazyLoader';
-// @ts-expect-error using alias as import so not an error
-import GlobalContextProvider from '@/context/GlobalContext'
 import 'react-toastify/dist/ReactToastify.css';
 
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import AuthLayout from './layout/AuthLayout'
+import BookListing from './views/books/BookListing'
+import DashboardLayout from './layout/DashboardLayout'
+import Login from './views/auth/Login'
+import Register from './views/auth/Register'
+// @ts-expect-error using alias as import so not an error
+import Spinner from '@/components/LazyLoader';
+import { ToastContainer } from 'react-toastify'
+// @ts-expect-error using alias as import so not an error
+import { useGlobalContextSelector } from '@/context/GlobalContext'
+
 function App() {
-  const globalItem = GlobalContextProvider.useGlobalContextSelector((ctx) => ctx[0]);
+  const globalItem = useGlobalContextSelector((ctx) => ctx[0]);
 
   return (
     <>

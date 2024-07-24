@@ -1,5 +1,5 @@
 // @ts-expect-error using alias as import so not an error
-import GlobalContextProvider from '@/context/GlobalContext'
+import { useGlobalContextSelector } from '@/context/GlobalContext'
 import React, { useState } from 'react';
 // @ts-expect-error using alias as import so not an error
 import { useRegisterUser } from '@/hooks/api/auth/useRegisterUser'
@@ -15,7 +15,7 @@ const RegistrationForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigate = useNavigate();
-  const dispatch = GlobalContextProvider.useGlobalContextSelector((ctx) => ctx[1]);
+  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
   const initRegisterUser = useRegisterUser();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

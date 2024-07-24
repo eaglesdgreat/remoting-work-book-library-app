@@ -1,9 +1,9 @@
 // @ts-expect-error using alias as import so not an error
-import GlobalContextProvider from '@/context/GlobalContext'
+import { useGlobalContextSelector } from '@/context/GlobalContext'
 import clsx from 'clsx'
 
 const GlobalSpinner = () => {
-  const { isSpinnerVisible } = GlobalContextProvider.useGlobalContextSelector((ctx) => ctx[0]);
+  const { isSpinnerVisible } = useGlobalContextSelector((ctx) => ctx[0]);
 
   return (
     <div className="relative">
