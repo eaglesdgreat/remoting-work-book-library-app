@@ -17,7 +17,7 @@ import { useGlobalContext } from '@/context/GlobalContext'
 // @ts-expect-error using alias as import so not an error
 import { getAllBooksService } from '@/services/books.service';
 
-export const useAllBooks = () => {
+export const useGetAllBooks = () => {
   const { dispatch } = useGlobalContext();
 
   const {
