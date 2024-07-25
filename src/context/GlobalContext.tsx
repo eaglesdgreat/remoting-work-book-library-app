@@ -3,21 +3,12 @@ import { GlobalContextProviderProps, GlobalContextValue } from '@/types';
 // @ts-expect-error using alias as import so not an error
 import { GlobalItemActions, GlobalItemState } from '@/reducers/types/reducer.type'
 
-import React from 'react'
 import { contextFactory } from './helpers/contextFactory'
 // @ts-expect-error using alias as import so not an error
-import { reducer } from '@/reducers/global.reducer'
-import { useImmerReducer } from 'use-immer'
+import { Dispatch, reducer } from '@/reducers/global.reducer'
+import { useReducer } from 'react'
 
-const [
-  GlobalContext,
-  useGlobalContext,
-  useGlobalContextSelector,
-] = contextFactory<[GlobalItemState, React.Dispatch<GlobalItemActions>]>()
-
-export { useGlobalContext, useGlobalContextSelector }
-
-const globalItems: GlobalContextValue = {
+const initialState: GlobalContextValue = {
   isSpinnerVisible: false,
   user: {
     id: 0,
@@ -31,11 +22,16 @@ const globalItems: GlobalContextValue = {
   token: "",
 }
 
+const [useGlobalContext, GlobalContext] = contextFactory<GlobalItemState, Dispatch<GlobalItemActions>>(initialState);
+
+export { useGlobalContext }
+
 const GlobalContextProvider = (props: GlobalContextProviderProps) => {
-  const [globalData, dispatch] = useImmerReducer(reducer, globalItems)
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const context = { state, dispatch };
 
   return (
-    <GlobalContext.Provider value={[globalData, dispatch]}>
+    <GlobalContext.Provider value={context}>
       {props.children}    
     </GlobalContext.Provider>
   )
