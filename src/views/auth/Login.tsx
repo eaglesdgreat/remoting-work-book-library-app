@@ -3,7 +3,7 @@ import { IAuthResponseProps, Types } from "@/types"
 import React, { useState } from 'react';
 
 // @ts-expect-error using alias as import so not an error
-import { useGlobalContextSelector } from '@/context/GlobalContext'
+import { useGlobalContext } from '@/context/GlobalContext'
 // @ts-expect-error using alias as import so not an error
 import { useLoginUser } from '@/hooks/api/auth/useLoginUser'
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
-  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
+  const { dispatch } = useGlobalContext();
   const initLoginUser = useLoginUser();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -13,10 +13,10 @@ import { handleAppError } from '@/helpers/handleAppError'
 // @ts-expect-error using alias as import so not an error
 import { registerUser } from '@/services/auth.service';
 // @ts-expect-error using alias as import so not an error
-import { useGlobalContextSelector } from '@/context/GlobalContext'
+import { useGlobalContext } from '@/context/GlobalContext'
 
 export const useRegisterUser = () => {
-  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
+  const { dispatch } = useGlobalContext();
 
   const {
     setStatusWithCallback: setRegisterStatus,

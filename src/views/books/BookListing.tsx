@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 // @ts-expect-error using alias as import so not an error
-import { useGlobalContextSelector } from '@/context/GlobalContext'
+import { useGlobalContext } from '@/context/GlobalContext'
 // @ts-expect-error using alias as import so not an error
 // import { IBookResponseProps } from '@/types'
 
 const BookListing = () => {
-  const { books } = useGlobalContextSelector((ctx) => ctx[0]);
+  const { state: { books } } = useGlobalContext();
 
   // const [books, setBooks] = useState<IBookResponseProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');

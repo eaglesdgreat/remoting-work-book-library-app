@@ -13,12 +13,12 @@ import { PaginationParamsProps, Types } from '@/types'
 // @ts-expect-error using alias as import so not an error
 import { useApiStatus } from '@/api/hooks/api.status.hook'
 // @ts-expect-error using alias as import so not an error
-import { useGlobalContextSelector } from '@/context/GlobalContext'
+import { useGlobalContext } from '@/context/GlobalContext'
 // @ts-expect-error using alias as import so not an error
 import { getAllBooksService } from '@/services/books.service';
 
 export const useAllBooks = () => {
-  const dispatch = useGlobalContextSelector((ctx) => ctx[1]);
+  const { dispatch } = useGlobalContext();
 
   const {
     setStatusWithCallback: setBookStatus,

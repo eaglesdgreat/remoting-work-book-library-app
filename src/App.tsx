@@ -12,10 +12,10 @@ import Register from './views/auth/Register'
 import Spinner from '@/components/LazyLoader';
 import { ToastContainer } from 'react-toastify'
 // @ts-expect-error using alias as import so not an error
-import { useGlobalContextSelector } from '@/context/GlobalContext'
+import { useGlobalContext } from '@/context/GlobalContext'
 
 function App() {
-  const globalItem = useGlobalContextSelector((ctx) => ctx[0]);
+  const { state: { isSpinnerVisible } } = useGlobalContext();
 
   return (
     <>
@@ -52,7 +52,7 @@ function App() {
         </div>
       </BrowserRouter>
 
-      <Spinner show={globalItem.isSpinnerVisible} />
+      <Spinner show={isSpinnerVisible} />
     </>
   );
 }
