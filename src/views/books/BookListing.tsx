@@ -1,54 +1,78 @@
-import { useEffect, useState } from 'react';
+// @ts-expect-error using alias as import so not an error
+import { IFilter, IPaginationProps, ISort, Types } from '@/types'
+import { useEffect, useState, Fragment } from 'react';
+
+// @ts-expect-error using alias as import so not an error
+import { useGetAllBooks } from '@/hooks/api/books/useGetAllBooks'
 // @ts-expect-error using alias as import so not an error
 import { useGlobalContext } from '@/context/GlobalContext'
-// @ts-expect-error using alias as import so not an error
-// import { IBookResponseProps } from '@/types'
+
+const PER_PAGE = 10;
 
 const BookListing = () => {
-  const { state: { books } } = useGlobalContext();
-
-  // const [books, setBooks] = useState<IBookResponseProps[]>([]);
+  const { state: { books }, dispatch } = useGlobalContext();
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('title'); // Default sort by title
-  const [filters, setFilters] = useState({ genre: '' }); // Add initial filter state
+  const [sortValue, setSortValue] = useState<string>('');
+  const [sortBy, setSortBy] = useState<ISort[]>([]);
+  const [filters, setFilters] = useState<IFilter[]>([{
+    column: '',
+    operator: '=',
+    value: ''
+  }]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [pagination, setPagination] = useState<IPaginationProps>({});
 
-  // const PER_PAGE = 20; // Number of books per page
+  const fetchAllBooks = useGetAllBooks();
 
   useEffect(() => {
-    // const fetchBooks = async () => {
-    //   const params = {
-    //     q: searchTerm, // Search term
-    //     sort: sortBy, // Sort by field
-    //     page: currentPage, // Current page number
-    //     ...filters, // Include filter params
-    //   };
-    //   const response = await axios.get('/api/books', { params }); // Replace '/api/books' with your actual endpoint
-    //   setBooks(response.data.books);
-    //   setHasMore(response.data.hasMore);
-    // };
+    const fetchBooks = async () => {
+      const params = {
+        search: searchTerm,
+        sort: sortBy,
+        page: currentPage,
+        filter: filters,
+        first: PER_PAGE,
+      };
 
-    // void fetchBooks();
-  }, [searchTerm, sortBy, currentPage, filters]);
+      const response = await fetchAllBooks(params);
+
+      if (response.status == 200) {
+        dispatch({
+          type: Types.AddBooks,
+          payload: response.data
+        })
+  
+        setPagination(response.data.paginatorInfo);
+      }
+    };
+
+    void fetchBooks();
+  }, [searchTerm, currentPage, sortBy]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset page on search
+    setCurrentPage(1);
   };
 
   const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-  };
-
-  const handleFilterChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value }); // Update specific filter
+    const { value } = e.target;
+    
+    setSortValue(value)
+    setSortBy([...sortBy, { column: value.split('-')[0], order: value.split('-')[1] }]);
   };
 
   const handleLoadMore = () => {
     const nextPage = currentPage + 1;
     setCurrentPage(nextPage);
   };
+
+  const toggleModal = () => {
+    document.getElementById('modal')!.classList.toggle('hidden');
+  }
+
+  const submitFilter = () => {
+    console.log('submit')
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -62,19 +86,19 @@ const BookListing = () => {
             onChange={handleSearch}
             className="px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 mr-2"
           />
-          <select value={sortBy} onChange={handleSortChange} className="border border-gray-300 rounded-md px-3 py-2">
-            <option value="title">Title</option>
-            <option value="author">Author</option>
+          <select value={sortValue} onChange={handleSortChange} className="border border-gray-300 rounded-md px-3 py-2">
+            <option value="title-asc">Title Ascending</option>
+            <option value="author-asc">Author Ascending</option>
+            <option value="title-desc">Title Descending</option>
+            <option value="author-desc">Author Descending</option>
           </select>
           <div className="ml-4">
-            <label htmlFor="genre">Genre:</label>
-            <select id="genre" name="genre" value={filters.genre} onChange={handleFilterChange} className="border border-gray-300 rounded-md px-3 py-2">
-              <option value="">All</option>
-              <option value="fantasy">Fantasy</option>
-              <option value="sci-fi">Sci-Fi</option>
-              <option value="mystery">Mystery</option>
-              {/* Add more options as needed */}
-            </select>
+            <button
+              className="py-2 px-6 bg-blue-500 text-white rounded hover:bg-blue-700 transition font-medium duration-500" 
+              onClick={toggleModal}
+            >
+              SHOW Filter
+            </button>
           </div>
         </div>
       </div>
@@ -83,11 +107,17 @@ const BookListing = () => {
           <BookCard key={book.id} title={book.title} author={book.author} image={book.image} />
         ))}
       </div>
-      {hasMore && (
+      {pagination?.hasMorePages && (
         <button onClick={handleLoadMore} className="mt-4 px-4 py-2 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
           Load More
         </button>
       )}
+      <FilterModal
+        filters={filters}
+        setFilters={setFilters}
+        toggleModal={toggleModal}
+        submitFilter={submitFilter}
+      />
     </div>
   );
 };
@@ -100,5 +130,123 @@ const BookCard = ({ title, author, image }) => (
     <p className="text-gray-600">{author}</p>
   </div>
 );
+
+const FilterModal = ({ filters, setFilters, toggleModal, submitFilter }) => {
+  const updateFilter = () => {
+    submitFilter()
+  }
+
+  const handleFilterChange = (value, index, type) => {
+    const filter = filters[index];
+    filter[type] = value;
+
+    setFilters([...filters, filter]);
+  };
+
+  const addFilterItem = () => {
+    setFilters([
+      ...filters,
+      {
+        column: '',
+        operator: '=',
+        value: ''
+      }
+    ])
+  }
+
+  const removeFilterItem = (index) => {
+    if (filters.length === 1) {
+      return;
+    }
+
+    // const updatedFilterItems = filters.filter((item, i) => i !== index)
+    filters.splice(index, 1)
+    setFilters([...filters]);
+  }
+
+  return (
+    <div className="fixed z-10 overflow-y-auto top-0 w-full left-0 hidden" id="modal">
+      <div className="flex items-center justify-center min-height-100vh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 transition-opacity">
+          <div className="absolute inset-0 bg-gray-900 opacity-75" />
+        </div>
+        <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+        <div className="inline-block align-center bg-white rounded-lg text-left overflow-auto shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            {
+              filters.map((filter: IFilter, index: number) => (
+                <Fragment key={index}>
+                  <div>
+                    <label className="font-medium text-gray-800">Column</label>
+
+                    <select
+                      id="filter"
+                      value={filter.column}
+                      onChange={(e) => handleFilterChange(e.target.value, index, 'column')}
+                      className="w-full outline-none rounded bg-gray-100 p-3 mt-2 mb-3"
+                    >
+                      <option value="title">Title</option>
+                      <option value="subtitle">Subtitle</option>
+                      <option value="description">Description</option>
+                      <option value="publisher">Publisher</option>
+                      <option value="published_date">Published Date</option>
+                      <option value="language">Language</option>
+                      <option value="number_of_pages">Number of pages</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="font-medium text-gray-800">Value</label>
+                    <div className="flex justify-between">
+                      <input
+                        type="text"
+                        placeholder="start typing..."
+                        value={filter.value}
+                        onChange={(e) => handleFilterChange(e.target.value, index, 'value')}
+                        className="w-full outline-none rounded bg-gray-100 p-2 mt-2 mb-3"
+                      />
+                      <span
+                        className="text-red-500 hover:text-red-800 aling-item-center cursor-pointer"
+                        onClick={() => removeFilterItem(index)}
+                      >X</span>
+                    </div>
+                  </div>
+                </Fragment>
+              ))
+            }
+          </div>
+
+          <div className="flex justify-end align-item-center">
+            <Button
+              name="Add"
+              classname="py-1 px-4 bg-green-500 text-white rounded font-small hover:bg-green-700 mr-2 mb-3 transition duration-500"
+              action={addFilterItem}
+            />
+          </div>
+
+          <div className="bg-gray-200 px-4 py-3 text-right">
+            <Button
+              name="Cancel"
+              classname="py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2"
+              action={toggleModal}
+            />
+            
+            <Button
+              name="Filter"
+              classname="py-2 px-4 bg-blue-500 text-white rounded font-medium hover:bg-blue-700 mr-2 transition duration-500"
+              action={updateFilter}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Button({ name, classname, action }) {
+  return (
+    <button type="button" className={classname} onClick={action}>{name}</button>
+  )
+}
 
 export default BookListing;

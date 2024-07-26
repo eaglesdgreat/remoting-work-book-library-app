@@ -1,16 +1,39 @@
-// @ts-expect-error using alias as import so not an error
-import { useGlobalContext } from '@/context/GlobalContext'
 import clsx from 'clsx'
+import { useState, useEffect } from 'react';
+interface Props {
+  show: boolean
+  delay?: number
+}
 
-const GlobalSpinner = () => {
-  const { state: { isSpinnerVisible } } = useGlobalContext();
+const GlobalSpinner = (props: Props) => {
+  const { show = false, delay = 0 } = props;
+  const [showSpinner, setShowSpinner] = useState<boolean>(false);
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>
+
+    if (!show) {
+      setShowSpinner(false)
+      return;
+    }
+
+    if (delay === 0) {
+      setShowSpinner(true)
+    } else {
+      timeout = setTimeout(() => setShowSpinner(true), delay)
+    }
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [show, delay, showSpinner])
 
   return (
     <div className="relative">
       <div
         className={clsx(
           'z-40 min-h-screen min-w-screen bg-gray-900 bg-opacity-40 fixed top-0 left-0 right-0 bottom-0 items-center justify-center',
-          isSpinnerVisible ? 'flex' : 'hidden'
+          showSpinner ? 'flex' : 'hidden'
         )}
       >
         <div className="w-64 h-48 bg-white rounded-lg flex items-center justify-center">

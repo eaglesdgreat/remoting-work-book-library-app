@@ -68,16 +68,31 @@ export type IBookProps = Pick<
   'title' | 'author_ids' | 'description' | 'image' | 'publisher' | 'published_date' | 'book'
 > & {subtitle?: string; number_of_pages?: number; language?: string}
 
-export interface PaginationParamsProps<T> {
+export interface IFilter {
+  column: string
+  operator: string
+  value: NonNullable<unknown>
+}
+
+export interface ISort {column: string; order: string}
+
+export interface PaginationParamsProps {
   first?: number;
   page?: number;
-  filter?: {
-    column: string
-    operator: string
-    value: T
-  }[]
+  filter?: IFilter[]
   search?: string
-  sort?: {column: string; order: string}[]
+  sort?: ISort[]
+}
+
+export interface IPaginationProps {
+  count: number
+  currentPage: number
+  hasMorePages: boolean
+  lastPage: number
+  perPage: number
+  total: number
+//   firstItem: firstItem()
+//   lastItem: lastItem()
 }
 
 export enum Types {

@@ -16,13 +16,13 @@ import { useApiStatus } from '@/api/hooks/api.status.hook'
 import { useGlobalContext } from '@/context/GlobalContext'
 // @ts-expect-error using alias as import so not an error
 import { getAllBooksService } from '@/services/books.service';
+import { useState, useEffect } from 'react';
 
 export const useGetAllBooks = () => {
   const { dispatch } = useGlobalContext();
+  const [status, setStatus] = useState<boolean>(false)
 
-  const {
-    setStatusWithCallback: setBookStatus,
-  } = useApiStatus(IDLE);
+  const updateApiStatus = useApiStatus(IDLE, setStatus);
 
   const toggleSpinner = (show: boolean) => {
     dispatch({
@@ -33,23 +33,21 @@ export const useGetAllBooks = () => {
     })
   }
 
+  useEffect(() => toggleSpinner(status), [status])
+
   return async (params: PaginationParamsProps) => {
-    setBookStatus(PENDING, (show) => {
-      toggleSpinner(show);
-    });
+    updateApiStatus(PENDING)
 
     const {response, error} = await getAllBooksService(params);
 
     if (error) {
-      setBookStatus(ERROR, (show) => {
-        toggleSpinner(show);
-      })
-
+      updateApiStatus(ERROR)
+      
       handleAppError(error.message)
+
+      return error;
     } else if (response) {
-      setBookStatus(SUCCESS, (show) => {
-        toggleSpinner(show);
-      });
+      updateApiStatus(SUCCESS)
 
       toast.success('Welcome back!')
 
