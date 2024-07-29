@@ -10,7 +10,7 @@ import { useGlobalContext } from '@/context/GlobalContext'
 const PER_PAGE = 10;
 
 const BookListing = () => {
-  const { state: { books }, dispatch } = useGlobalContext();
+  const { state: { books, paginationInfo }, dispatch } = useGlobalContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortValue, setSortValue] = useState<string>('');
   const [sortBy, setSortBy] = useState<ISort[]>([]);
@@ -20,33 +20,42 @@ const BookListing = () => {
     value: ''
   }]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pagination, setPagination] = useState<IPaginationProps>({});
+  const [pagination, setPagination] = useState<IPaginationProps>(paginationInfo);
 
   const fetchAllBooks = useGetAllBooks();
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const params = {
-        search: searchTerm,
-        sort: sortBy,
-        page: currentPage,
-        filter: filters,
-        first: PER_PAGE,
-      };
-
-      const response = await fetchAllBooks(params);
-
-      if (response.status == 200) {
-        dispatch({
-          type: Types.AddBooks,
-          payload: response.data
-        })
-  
-        setPagination(response.data.paginatorInfo);
-      }
+  const fetchBooks = async () => {
+    const params = {
+      search: searchTerm,
+      sort: sortBy,
+      page: currentPage,
+      filter: filters,
+      first: PER_PAGE,
     };
 
-    void fetchBooks();
+    const response = await fetchAllBooks(params);
+
+    if (response.status == 200) {
+      dispatch({
+        type: Types.AddBooks,
+        payload: [...books, ...response.data]
+      })
+
+      dispatch({
+        type: Types.Pagination,
+        payload: response.paginatorInfo
+      })
+
+      setPagination(response.paginatorInfo);
+    }
+  };
+
+  useEffect(() => {
+    if (books.length === 0) void fetchBooks();
+  }, [books]);
+
+  useEffect(() => {
+    if (searchTerm || currentPage > 1 || sortBy.length > 0) void fetchBooks();
   }, [searchTerm, currentPage, sortBy]);
 
   const handleSearch = (e) => {
@@ -58,7 +67,8 @@ const BookListing = () => {
     const { value } = e.target;
     
     setSortValue(value)
-    setSortBy([...sortBy, { column: value.split('-')[0], order: value.split('-')[1] }]);
+    setSortBy([{ column: value.split('-')[0], order: value.split('-')[1] }]);
+    setCurrentPage(1);
   };
 
   const handleLoadMore = () => {

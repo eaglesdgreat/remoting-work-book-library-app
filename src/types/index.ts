@@ -38,6 +38,7 @@ export interface GlobalContextValue {
   user: IUserDataProps;
   books: IBookResponseProps[]
   token: string | null
+  paginationInfo: IPaginationProps 
 }
 
 export interface GlobalContextProviderProps {
@@ -102,4 +103,5 @@ export enum Types {
   RemoveToken = 'REMOVE_TOKEN',
   GetToken = 'GET_TOKEN',
   AddBooks = 'ADD_BOOKS',
+  Pagination = 'PAGINATION'
 }

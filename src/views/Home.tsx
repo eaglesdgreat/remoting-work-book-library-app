@@ -23,6 +23,11 @@ const Home = () => {
         payload: response.data
       })
 
+      dispatch({
+        type: Types.Pagination,
+        payload: response.paginatorInfo
+      })
+
       setTimeout(() => navigate('/books'), 2000)
     }
   }

@@ -1,4 +1,10 @@
-import { GlobalContextValue, IBookResponseProps, IUserDataProps, Types } from 'types';
+import {
+  GlobalContextValue,
+  IBookResponseProps,
+  IPaginationProps,
+  IUserDataProps,
+  Types
+} from 'types';
 
 export type GlobalItemState = GlobalContextValue
 
@@ -25,6 +31,7 @@ interface GlobalItemPayload {
   [Types.RemoveToken]: string
   [Types.GetToken]: string
   [Types.AddBooks]: IBookResponseProps[]
+  [Types.Pagination]: IPaginationProps
 }
 
 export type GlobalItemActions = ActionMap<GlobalItemPayload>[keyof ActionMap<GlobalItemPayload>];

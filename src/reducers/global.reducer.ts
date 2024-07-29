@@ -1,6 +1,6 @@
 import { GlobalItemActions, GlobalItemState } from './types/reducer.type'
 // @ts-expect-error using alias as import so not an error
-import { IBookResponseProps, IUserDataProps, Types } from '@/types';
+import { IBookResponseProps, IUserDataProps, Types, IPaginationProps } from '@/types';
 
 export const reducer = (state: GlobalItemState, action: GlobalItemActions) => {
   switch (action.type) {
@@ -23,6 +23,8 @@ export const reducer = (state: GlobalItemState, action: GlobalItemActions) => {
 
     case Types.AddBooks:
       return { ...state, books: action.payload as IBookResponseProps[] };
+    case Types.Pagination:
+        return { ...state, paginationInfo: action.payload as IPaginationProps };
 
     default:
       return state;

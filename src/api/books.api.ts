@@ -10,18 +10,27 @@ const URLS = {
 
 export const getAllPaginatedBooks = (params: PaginationParamsProps) => {
   let parameters = `first=${params?.first ?? 10}&page=${params?.page ?? 1}`;
-
-  if (params?.filter) {
-    parameters = `${parameters}&${params.filter}`
-  }
+  const config = {
+    filter: null,
+    sort: null,
+  };
 
   if (params?.search) {
-    parameters = `${parameters}&${params.search}`
+    parameters = `${parameters}&search=${params.search}`;
+  }
+  
+  if (params?.filter) {
+    config.filter = params.filter;
   }
 
   if (params?.sort) {
-    parameters = `${parameters}&${params.sort}`
+    config.sort = params.sort;
   }
 
-  return api.get<IBookResponseProps>(`${URLS.books}?${parameters}`)
+  return api.get<IBookResponseProps>(`${URLS.books}?${parameters}`, {
+    params: config,
+    paramsSerializer: {
+      indexes: true, // use brackets with indexes
+    }
+  })
 }
