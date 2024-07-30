@@ -19,11 +19,11 @@ export const getAllPaginatedBooks = (params: PaginationParamsProps) => {
     parameters = `${parameters}&search=${params.search}`;
   }
   
-  if (params?.filter) {
+  if (params?.filter[0].column) {
     config.filter = params.filter;
   }
 
-  if (params?.sort) {
+  if (params?.sort.length > 0) {
     config.sort = params.sort;
   }
 
