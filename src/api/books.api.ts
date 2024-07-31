@@ -1,5 +1,5 @@
 // @ts-expect-error using alias as import so not an error
-import { IBookResponseProps, PaginationParamsProps } from '@/types'
+import { IBookResponseProps, IPaginationProps, PaginationParamsProps } from '@/types'
 
 import api from './api';
 
@@ -7,6 +7,11 @@ const URLS = {
   books: 'books',
 }
 // IBookProps,
+
+interface Response {
+  data: IBookResponseProps[]
+  paginatorInfo: IPaginationProps
+}
 
 export const getAllPaginatedBooks = (params: PaginationParamsProps) => {
   let parameters = `first=${params?.first ?? 10}&page=${params?.page ?? 1}`;
@@ -27,7 +32,7 @@ export const getAllPaginatedBooks = (params: PaginationParamsProps) => {
     config.sort = params.sort;
   }
 
-  return api.get<IBookResponseProps>(`${URLS.books}?${parameters}`, {
+  return api.get<Response>(`${URLS.books}?${parameters}`, {
     params: config,
     paramsSerializer: {
       indexes: true, // use brackets with indexes

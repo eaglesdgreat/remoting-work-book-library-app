@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState, useRef } from 'react';
 // @ts-expect-error using alias as import so not an error
-import { IFilter, IPaginationProps, ISort, Types } from '@/types';
+import { IBookResponseProps, IFilter, IPaginationProps, ISort, Types } from '@/types';
 
 // @ts-expect-error using alias as import so not an error
 import { debounce } from '@/helpers/debounce'
@@ -8,11 +8,12 @@ import { debounce } from '@/helpers/debounce'
 import { useGetAllBooks } from '@/hooks/api/books/useGetAllBooks';
 // @ts-expect-error using alias as import so not an error
 import { useGlobalContext } from '@/context/GlobalContext';
+// @ts-expect-error using alias as import so not an error
+import EmptyState from '@/components/EmptyState';
 
 const PER_PAGE = 10;
 
 const BookListing = () => {
-  console.log('rerender')
   const {
     state: { books, paginationInfo },
     dispatch,
@@ -20,6 +21,7 @@ const BookListing = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortValue, setSortValue] = useState<string>('');
   const [sortBy, setSortBy] = useState<ISort[]>([]);
+  const [booksData, setBooksData] = useState<IBookResponseProps[]>(books);
   const [filters, setFilters] = useState<IFilter[]>([
     {
       column: '',
@@ -31,7 +33,7 @@ const BookListing = () => {
   const [previousPage, setPreviousPage] = useState(0);
   const [pagination, setPagination] =
     useState<IPaginationProps>(paginationInfo);
-
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
   const fetchAllBooks = useGetAllBooks();
 
   const fetchBooks = async () => {
@@ -46,9 +48,11 @@ const BookListing = () => {
     const response = await fetchAllBooks(params);
 
     if (response.status == 200) {
+      const data = [...booksData, ...response.data];
+      
       dispatch({
         type: Types.AddBooks,
-        payload: [...books, ...response.data],
+        payload: data,
       });
 
       dispatch({
@@ -56,15 +60,20 @@ const BookListing = () => {
         payload: response.paginatorInfo,
       });
 
+      setBooksData(data)
       setPagination(response.paginatorInfo);
     }
   };
 
   useEffect(() => {
-    if (books.length === 0) {
-      void fetchBooks();
+    if ((!timeout.current || booksData.length === 0) && !searchTerm) {
+      timeout.current = setTimeout(() => fetchBooks(), 1000)
     }
-  }, [books]);
+
+    return () => {
+      clearTimeout(timeout.current)
+    }
+  }, [booksData, searchTerm]);
 
   useEffect(() => {
     if (previousPage === currentPage) {
@@ -80,7 +89,6 @@ const BookListing = () => {
       filter: filters,
       first: PER_PAGE,
     };
-    console.log(params);
 
     const response = await fetchAllBooks(params);
 
@@ -95,6 +103,7 @@ const BookListing = () => {
         payload: response.paginatorInfo,
       });
 
+      setBooksData(response.data)
       setPagination(response.paginatorInfo);
     }
   }
@@ -103,13 +112,13 @@ const BookListing = () => {
     return async (sortQuery: ISort[]) => {
       await fetchSearchAndSortRequests(searchTerm, sortQuery)
     }
-  }, [])
+  }, [sortBy, searchTerm])
 
   const initSearchAPiRequest = useMemo(() => {
     return debounce(async (query: string) => {
       await fetchSearchAndSortRequests(query, sortBy)
     }, 500)
-  }, []);
+  }, [sortBy]);
 
   const handleSearch = (e) => {
     const query = e.target.value
@@ -141,7 +150,7 @@ const BookListing = () => {
   };
 
   const submitFilter = () => {
-    console.log('submit');
+    console.log('submit', filters);
   };
 
   return (
@@ -177,8 +186,16 @@ const BookListing = () => {
           </div>
         </div>
       </div>
+      {
+        booksData.length === 0 && (
+          <EmptyState
+            title="No search result found."
+            subTitle="Try searching for a different book please."
+          />
+        )
+      }
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {books.map((book) => (
+        {booksData.map((book) => (
           <BookCard
             key={book.id}
             title={book.title}
