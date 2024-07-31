@@ -48,8 +48,6 @@ const EmptyState = (props: Props) => {
           </div>
         </div>
       </div>
-
-      {/* <div className="credit">Illustration by <a href="https://icons8.com/" target="_blank">ICONS8</a>.</div> */}
     </>
   )
 }

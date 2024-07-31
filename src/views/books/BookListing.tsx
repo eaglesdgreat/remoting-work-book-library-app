@@ -67,6 +67,7 @@ const BookListing = () => {
 
   useEffect(() => {
     if ((!timeout.current || booksData.length === 0) && !searchTerm) {
+      console.log('call book fetch')
       timeout.current = setTimeout(() => fetchBooks(), 1000)
     }
 
@@ -81,7 +82,11 @@ const BookListing = () => {
     }
   }, [currentPage, previousPage]);
 
-  const fetchSearchAndSortRequests = async (query: string, sortQuery: ISort[]) => {
+  const fetchSearchAndSortRequests = async (
+    query: string,
+    sortQuery: ISort[],
+    filters: IFilter[]
+  ) => {
     const params = {
       search: query,
       sort: sortQuery,
@@ -110,15 +115,15 @@ const BookListing = () => {
 
   const initSortApiRequest = useMemo(() => {
     return async (sortQuery: ISort[]) => {
-      await fetchSearchAndSortRequests(searchTerm, sortQuery)
+      await fetchSearchAndSortRequests(searchTerm, sortQuery, filters)
     }
-  }, [sortBy, searchTerm])
+  }, [sortBy, searchTerm, filters])
 
   const initSearchAPiRequest = useMemo(() => {
     return debounce(async (query: string) => {
-      await fetchSearchAndSortRequests(query, sortBy)
+      await fetchSearchAndSortRequests(query, sortBy, filters)
     }, 500)
-  }, [sortBy]);
+  }, [sortBy, filters]);
 
   const handleSearch = (e) => {
     const query = e.target.value
@@ -149,8 +154,10 @@ const BookListing = () => {
     document.getElementById('modal')!.classList.toggle('hidden');
   };
 
-  const submitFilter = () => {
+  const submitFilter = async () => {
     console.log('submit', filters);
+    await fetchSearchAndSortRequests(searchTerm, sortBy, filters)
+    toggleModal();
   };
 
   return (
@@ -244,10 +251,9 @@ const FilterModal = ({ filters, setFilters, toggleModal, submitFilter }) => {
   };
 
   const handleFilterChange = (value, index, type) => {
-    const filter = filters[index];
-    filter[type] = value;
+    filters[index][type] = value;
 
-    setFilters([...filters, filter]);
+    setFilters([...filters]);
   };
 
   const addFilterItem = () => {
@@ -266,7 +272,6 @@ const FilterModal = ({ filters, setFilters, toggleModal, submitFilter }) => {
       return;
     }
 
-    // const updatedFilterItems = filters.filter((item, i) => i !== index)
     filters.splice(index, 1);
     setFilters([...filters]);
   };
