@@ -1,15 +1,15 @@
-import { Fragment, useEffect, useMemo, useState, useRef } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 // @ts-expect-error using alias as import so not an error
 import { IBookResponseProps, IFilter, IPaginationProps, ISort, Types } from '@/types';
 
+// @ts-expect-error using alias as import so not an error
+import EmptyState from '@/components/EmptyState';
 // @ts-expect-error using alias as import so not an error
 import { debounce } from '@/helpers/debounce'
 // @ts-expect-error using alias as import so not an error
 import { useGetAllBooks } from '@/hooks/api/books/useGetAllBooks';
 // @ts-expect-error using alias as import so not an error
 import { useGlobalContext } from '@/context/GlobalContext';
-// @ts-expect-error using alias as import so not an error
-import EmptyState from '@/components/EmptyState';
 
 const PER_PAGE = 10;
 
@@ -125,6 +125,12 @@ const BookListing = () => {
     }, 500)
   }, [sortBy, filters]);
 
+  const initFilterApiRequest = useMemo(() => {
+    return async (filterQuery: IFilter[]) => {
+      await fetchSearchAndSortRequests(searchTerm, sortBy, filterQuery)
+    }
+  }, [sortBy, searchTerm, filters])
+
   const handleSearch = (e) => {
     const query = e.target.value
     setSearchTerm(query);
@@ -155,10 +161,22 @@ const BookListing = () => {
   };
 
   const submitFilter = async () => {
-    console.log('submit', filters);
-    await fetchSearchAndSortRequests(searchTerm, sortBy, filters)
+    await initFilterApiRequest(filters)
     toggleModal();
   };
+
+  const clearParameters = () => {
+    setFilters([
+        {
+          column: '',
+          operator: '=',
+          value: '',
+        },
+    ])
+    setSearchTerm("")
+    setSortBy([])
+    void fetchBooks()
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -189,6 +207,14 @@ const BookListing = () => {
               onClick={toggleModal}
             >
               SHOW Filter
+            </button>
+          </div>
+          <div className="ml-4">
+            <button
+              className="py-2 px-6 bg-red-500 text-white rounded hover:bg-red-700 transition font-medium duration-500"
+              onClick={clearParameters}
+            >
+              clear
             </button>
           </div>
         </div>
@@ -308,6 +334,7 @@ const FilterModal = ({ filters, setFilters, toggleModal, submitFilter }) => {
                     }
                     className="w-full outline-none rounded bg-gray-100 p-3 mt-2 mb-3"
                   >
+                    <option value="" disabled>Select Column</option>
                     <option value="title">Title</option>
                     <option value="subtitle">Subtitle</option>
                     <option value="description">Description</option>
