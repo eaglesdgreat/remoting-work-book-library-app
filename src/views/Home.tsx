@@ -6,7 +6,9 @@ import { Types } from '@/types'
 import { useGetAllBooks } from '@/hooks/api/books/useGetAllBooks'
 // @ts-expect-error using alias as import so not an error
 import { useGlobalContext } from '@/context/GlobalContext'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import homeLogo from '@/assets/home_logo.png'
+import styles from './home.module.css'
 
 const Home = () => {
   const navigate = useNavigate();
@@ -45,9 +47,9 @@ const Home = () => {
   }, [books])
 
   return (
-    <div className="w-100 flex">
-      <div>
-        <h3>My <span>Book</span> shelf</h3>
+    <div className={styles.home}>
+      <div className={`${styles.container} animate-pulse`}>
+        <img  src={homeLogo} alt="home"/>
       </div>
     </div>
   );

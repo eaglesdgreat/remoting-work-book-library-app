@@ -35,10 +35,9 @@ function App() {
         draggable
         pauseOnHover
         theme="dark"
-        // transition: Bounce
       />
 
-      <div className="App mx-auto max-w-6xl text-center my-8">
+      <div className="App mx-auto size-full">
         <Suspense
           fallback={
             <div className="flex justify-center">
