@@ -67,7 +67,6 @@ const BookListing = () => {
 
   useEffect(() => {
     if ((!timeout.current || booksData.length === 0) && !searchTerm) {
-      console.log('call book fetch')
       timeout.current = setTimeout(() => fetchBooks(), 1000)
     }
 
@@ -167,15 +166,15 @@ const BookListing = () => {
 
   const clearParameters = () => {
     setFilters([
-        {
-          column: '',
-          operator: '=',
-          value: '',
-        },
+      {
+        column: '',
+        operator: '=',
+        value: '',
+      },
     ])
-    setSearchTerm("")
+    setSearchTerm('')
     setSortBy([])
-    void fetchBooks()
+    void fetchSearchAndSortRequests('', [], [{ column: '', operator: '=', value: '' }]);
   }
 
   return (
