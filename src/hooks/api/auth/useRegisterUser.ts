@@ -14,13 +14,13 @@ import { handleAppError } from '@/helpers/handleAppError'
 import { registerUser } from '@/services/auth.service';
 // @ts-expect-error using alias as import so not an error
 import { useGlobalContext } from '@/context/GlobalContext'
+import { useState, useEffect } from 'react';
 
 export const useRegisterUser = () => {
   const { dispatch } = useGlobalContext();
+  const [status, setStatus] = useState<boolean>(false)
 
-  const {
-    setStatusWithCallback: setRegisterStatus,
-  } = useApiStatus(IDLE);
+  const updateApiStatus = useApiStatus(IDLE, setStatus);
 
   const toggleSpinner = (show: boolean) => {
     dispatch({
@@ -31,25 +31,19 @@ export const useRegisterUser = () => {
     })
   }
 
+  useEffect(() => toggleSpinner(status), [status])
+
   return async (payload: IRegisterProps) => {
-    setRegisterStatus(PENDING, (show) => {
-      toggleSpinner(show);
-    });
+    updateApiStatus(PENDING)
 
     const {response, error} = await registerUser(payload);
 
-    console.log('data', response, error)
-
     if (error) {
-      setRegisterStatus(ERROR, (show) => {
-        toggleSpinner(show);
-      })
+      updateApiStatus(ERROR)
 
       handleAppError(error.message)
     } else if (response) {      
-      setRegisterStatus(SUCCESS, (show) => {
-        toggleSpinner(show);
-      });
+      updateApiStatus(SUCCESS)
 
       toast.success('Account created!')
 

@@ -1,0 +1,33 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  /* top: 0.73px;
+  left: -37.35px;
+  gap: 0px;
+  opacity: 0px; */
+  /* angle: 1.99 deg; */
+  background: linear-gradient(160.86deg, #FA7C54 -8.64%, #EC2C5A 121.84%), linear-gradient(160.86deg, #FFFFFF 8.64%, #FFFFFF -121.84%);
+  /* background: radial-gradient(ellipse farthest-corner at 0 140%, #3c84cc 0%, #316dc2 70%, #4e95d3 70%); */
+}
+.customShapeDivider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: inherit;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.customShapeDivider svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: inherit;
+  transform: rotate(180deg);
+}
+
+.customShapeDivider .shapeFill {
+  fill: #FFFFFF;
+}

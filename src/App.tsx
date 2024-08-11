@@ -47,6 +47,8 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             
             <Route element={<DashboardLayout />}>
               {/* <Route path="/books" element={<BookListing />} /> */}
@@ -54,8 +56,6 @@ function App() {
 
             <Route element={<AuthLayout />}>
               <Route path="/books" element={<BookListing />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
             </Route>
           </Routes>
         </Suspense>
