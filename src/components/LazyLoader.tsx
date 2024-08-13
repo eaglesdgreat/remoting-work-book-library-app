@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
+
 import clsx from 'clsx'
-import { useState, useEffect } from 'react';
+
 interface Props {
   show: boolean
   delay?: number
@@ -36,9 +38,9 @@ const GlobalSpinner = (props: Props) => {
           showSpinner ? 'flex' : 'hidden'
         )}
       >
-        <div className="w-64 h-48 bg-white rounded-lg flex items-center justify-center">
+        <div className="w-64 h-48 bg-transparent rounded-lg flex items-center justify-center">
           <svg
-            className="animate-spin h-12 w-12 text-indigo-700"
+            className="animate-spin h-12 w-12 text-orange-700"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
