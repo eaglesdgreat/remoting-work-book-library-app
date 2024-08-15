@@ -2,18 +2,4 @@
   width: 100%;
   height: 100vh;
   position: relative;
-  /* background: linear-gradient(160.86deg, #FA7C54 -8.64%, #EC2C5A 121.84%); */
-}
-
-.container svg {
-  height: inherit;
-}
-
-.shadow {
-  -webkit-filter: drop-shadow( 3px 3px 2px rgba(250, 124, 84, .4));
-  filter: drop-shadow( 3px 3px 2px rgba(250, 124, 84, .4));
-}
-
-.form {
-
 }
