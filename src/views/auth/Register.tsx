@@ -1,5 +1,5 @@
 // @ts-expect-error using alias as import so not an error
-import { IAuthResponseProps, Types } from "@/types"
+import { IAuthResponseProps, Types, IRegisterProps } from "@/types"
 import React, { useState } from 'react';
 
 import styles from './register.module.css'
@@ -8,29 +8,34 @@ import { useGlobalContext } from '@/context/GlobalContext'
 import { useNavigate } from 'react-router-dom';
 // @ts-expect-error using alias as import so not an error
 import { useRegisterUser } from '@/hooks/api/auth/useRegisterUser'
+// @ts-expect-error using alias as import so not an error
+import AuthForm from '@/components/AuthForm';
+
+const initialForm = {
+  name: '',
+  username: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+}
 
 const RegistrationForm = () => {
-  const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  // const [name, setName] = useState('');
+  // const [username, setUsername] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [confirmPassword, setConfirmPassword] = useState('');
+  const [form, setForm] = useState<IRegisterProps>(initialForm);
 
   const navigate = useNavigate();
   const { dispatch } = useGlobalContext();
   const initRegisterUser = useRegisterUser();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, formData: IRegisterProps) => {
     e.preventDefault();
 
     try {
-      const response = await initRegisterUser({
-        email,
-        password,
-        username,
-        name,
-        password_confirmation: confirmPassword
-      }) as IAuthResponseProps;
+      const response = await initRegisterUser({ ...formData }) as IAuthResponseProps;
 
 
       if (response.token) {
@@ -44,10 +49,11 @@ const RegistrationForm = () => {
           payload: response.token
         })
 
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
+        setForm(initialForm)
+        // setUsername('');
+        // setEmail('');
+        // setPassword('');
+        // setConfirmPassword('');
 
         return navigate('/');
       }
@@ -58,7 +64,12 @@ const RegistrationForm = () => {
 
   return (
     <div className={styles.container}>
-      <div className="max-w-md w-full space-y-8">
+      <AuthForm<IRegisterProps>
+        form={form}
+        setFormData={setForm}
+        handleSubmit={handleSubmit}
+      />
+      {/* <div className="max-w-md w-full space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-center">Create Your Account</h1>
           <p className="text-gray-600 text-center mt-2">Sign up for a new account</p>
@@ -134,7 +145,7 @@ const RegistrationForm = () => {
             </button>
           </div>
         </form>
-      </div>
+      </div> */}
     </div>
   );
 };

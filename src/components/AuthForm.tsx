@@ -1,15 +1,21 @@
 import styles from './AuthForm.module.css';
 
-function AuthForm<T> (props: T, setData: () => void) {
+interface Props<T> {
+  form: T
+  setFormData: () => void
+  handleSubmit: () => void
+}
+
+function AuthForm<T> ({ form, setFormData, handleSubmit }: Props<T>) {
   return (
     <>
-      <svg viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g filter="url(#filter0_d_7_126)">
+      <svg viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.shadow}>
+        <g filter="url(#filter0_d_7_126)" className={styles.shadow}>
           <path d="M422.191 543.979C192.258 503.244 -0.0049549 1077.16 -0.0049549 1077.16L-24.5485 0.28931L2015.36 -70.4756L1632.2 225.998C1632.2 225.998 1048.5 730.186 840.631 745.682C632.759 761.179 626.854 580.237 422.191 543.979Z" fill="url(#paint0_linear_7_126)"/>
         </g>
 
         <defs>
-          <filter id="filter0_d_7_126" x="-28.5485" y="-70.4756" width="2047.91" height="1155.64" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <filter id="filter0_d_7_126" x="-28.5485" y="-70.4756" width="2047.91" height="1155.64" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB" className={styles.shadow}>
             <feFlood floodOpacity="0" result="BackgroundImageFix"/>
             <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
             <feOffset dy="4"/>
