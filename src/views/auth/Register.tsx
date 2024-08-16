@@ -20,11 +20,6 @@ const initialForm = {
 }
 
 const RegistrationForm = () => {
-  // const [name, setName] = useState('');
-  // const [username, setUsername] = useState('');
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  // const [confirmPassword, setConfirmPassword] = useState('');
   const [form, setForm] = useState<IRegisterProps>(initialForm);
 
   const navigate = useNavigate();
@@ -36,7 +31,6 @@ const RegistrationForm = () => {
 
     try {
       const response = await initRegisterUser({ ...formData }) as IAuthResponseProps;
-
 
       if (response.token) {
         dispatch({
@@ -50,10 +44,6 @@ const RegistrationForm = () => {
         })
 
         setForm(initialForm)
-        // setUsername('');
-        // setEmail('');
-        // setPassword('');
-        // setConfirmPassword('');
 
         return navigate('/');
       }
