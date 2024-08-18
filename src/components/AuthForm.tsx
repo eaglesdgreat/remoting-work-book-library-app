@@ -3,14 +3,14 @@ import styles from './AuthForm.module.css';
 import { useEffect } from 'react';
 
 interface Props<T> {
-  form: T
+  content: T
   setFormData: () => void
   handleSubmit: () => void
 }
 // width="1920"
 //  height="1080"
 
-function AuthForm<T> ({ form, setFormData, handleSubmit }: Props<T>) {
+function AuthForm<T> ({ content, setFormData, handleSubmit }: Props<T>) {
   useEffect(() => {
     const parent = document.querySelector(`.${regStyles.container}`)!;
     const svg = parent.querySelector('svg') as SVGElement | null;

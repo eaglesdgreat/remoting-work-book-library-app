@@ -55,7 +55,7 @@ const RegistrationForm = () => {
   return (
     <div className={styles.container}>
       <AuthForm<IRegisterProps>
-        form={form}
+        content={form}
         setFormData={setForm}
         handleSubmit={handleSubmit}
       />
