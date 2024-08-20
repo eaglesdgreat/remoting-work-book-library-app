@@ -34,9 +34,12 @@ function AuthForm<T> ({ content, setFormData, handleSubmit }: Props<T>) {
 
   return (
     <>
-      <svg viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.shadow}>
+      <svg viewBox="0 0 1520 800" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.shadow}>
         <g filter="url(#filter0_d_7_126)">
-          <path d="M422.191 543.979C192.258 503.244 -0.0049549 1077.16 -0.0049549 1077.16L-24.5485 0.28931L2015.36 -70.4756L1632.2 225.998C1632.2 225.998 1048.5 730.186 840.631 745.682C632.759 761.179 626.854 580.237 422.191 543.979Z" fill="url(#paint0_linear_7_126)"/>
+          <path
+            d="M422.191 543.979C192.258 503.244 -0.0049549 1077.16 -0.0049549 1077.16L-24.5485 0.28931L2015.36 -70.4756L1632.2 225.998C1632.2 225.998 1048.5 730.186 840.631 745.682C632.759 761.179 626.854 580.237 422.191 543.979Z"
+            fill="url(#paint0_linear_7_126)"
+          />
         </g>
 
         <defs>
@@ -57,7 +60,7 @@ function AuthForm<T> ({ content, setFormData, handleSubmit }: Props<T>) {
         </defs>
       </svg>
 
-      <div className={styles.form}></div>
+      {/* <div className={styles.form}></div> */}
     </>
   )
 }
