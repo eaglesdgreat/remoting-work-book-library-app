@@ -1,15 +1,15 @@
 // @ts-expect-error using alias as import so not an error
-import { IAuthResponseProps, Types, IRegisterProps } from "@/types"
+import { IAuthResponseProps, IRegisterProps, Types } from "@/types"
 import React, { useState } from 'react';
 
+// @ts-expect-error using alias as import so not an error
+import AuthForm from '@/components/AuthForm';
 import styles from './register.module.css'
 // @ts-expect-error using alias as import so not an error
 import { useGlobalContext } from '@/context/GlobalContext'
 import { useNavigate } from 'react-router-dom';
 // @ts-expect-error using alias as import so not an error
 import { useRegisterUser } from '@/hooks/api/auth/useRegisterUser'
-// @ts-expect-error using alias as import so not an error
-import AuthForm from '@/components/AuthForm';
 
 const initialForm = {
   name: '',
@@ -59,7 +59,7 @@ const RegistrationForm = () => {
         setFormData={setForm}
         handleSubmit={handleSubmit}
       />
-      {/* <div className="max-w-md w-full space-y-8">
+      <div className="max-w-md w-full space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-center">Create Your Account</h1>
           <p className="text-gray-600 text-center mt-2">Sign up for a new account</p>
@@ -135,7 +135,7 @@ const RegistrationForm = () => {
             </button>
           </div>
         </form>
-      </div> */}
+      </div>
     </div>
   );
 };
