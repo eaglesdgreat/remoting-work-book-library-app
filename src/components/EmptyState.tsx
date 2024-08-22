@@ -44,7 +44,7 @@ const EmptyState = (props: Props) => {
           </div>
           <div className={styles.message}>{props.title ?? 'No records has been added yet.'}</div>
           <div className={styles.help}>
-            {props.subTitle ?? 'Add a new record by simpley clicking the button on top right side.'}
+            {props.subTitle ?? 'Add a new record by simpley clicking the button below.'}
           </div>
         </div>
       </div>
