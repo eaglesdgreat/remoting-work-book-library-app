@@ -60,13 +60,13 @@ const RegistrationForm = () => {
         handleSubmit={handleSubmit}
       />
   
-      <div className="max-w-md w-full space-y-8">
+      {/* <div className="max-w-md w-full space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-center">Create Your Account</h1>
           <p className="text-gray-600 text-center mt-2">Sign up for a new account</p>
         </div>
 
-        {/* <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col space-y-1">
             <label htmlFor="username" className="text-sm font-medium text-gray-700 text-left">Name</label>
             <input
@@ -135,8 +135,8 @@ const RegistrationForm = () => {
               Sign Up
             </button>
           </div>
-        </form> */}
-      </div>
+        </form>
+      </div> */}
     </div>
   );
 };
