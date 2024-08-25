@@ -1,6 +1,7 @@
 import regStyles from '@/views/auth/register.module.css';
 import styles from './AuthForm.module.css';
 import { useEffect } from 'react';
+import formLogo from '@/assets/logo_form.png'
 
 interface Props<T> {
   content: T
@@ -82,7 +83,15 @@ function AuthForm<T> ({ content, setFormData, handleSubmit }: Props<T>) {
         </svg>
       </div>
 
-      <div className={styles.form}></div>
+      <div className={styles.form}>
+        <div className={styles.formContainer}>
+          <img  src={formLogo} alt="form logo"/>
+          <div className={styles.formTitle}>
+            <h4>Registration</h4>
+            <p>For Both Staff & Students</p>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
