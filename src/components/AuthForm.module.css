@@ -7,14 +7,13 @@
 }
 
 .svgContainer {
-  display: inline-block;
   width: 100%;
-  height: 100%;
-  resize: inherit;
+  height: 110%;
+  /* resize: both; */
   overflow: auto;
   position: relative;
 
-  @media (min-width: 1280px) {
+  /* @media (min-width: 1280px) {
     width: 1420px;
     height: 800px;
   }
@@ -32,29 +31,74 @@
   @media (min-width: 1920px) {
     width: 1920px;
     height: 1080px;
-  }
+  } */
 }
 
 svg {
-  display: inline-block;
   width: 100%;
   height: 100%;
 }
 
 .form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 565px;
-  height: 745px;
+  height: 817px;
+  padding: 60px 0;
   background: rgba(255, 255, 255, 1);
   position: absolute;
   border-radius: 10px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
-  top: 50px;
+  top: 70px;
   left: 495px;
   z-index: 2;
 
-  @media (min-width: 1919px) {
+  /* @media (min-width: 1919px) {
     height: 917px;
     top: 82px;
     left: 678px;
-  }
+  } */
+}
+
+.formContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  align-items: center;
+  width: 423px;
+  height: 769px;
+}
+
+.formContainer > img {
+  width: 150px;
+  height: 92.15px;
+}
+
+.formTitle {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: .8rem;
+  width: 100%;
+  height: 69px;
+  margin-top: 30px;
+  padding: 4px;
+}
+
+.formTitle > h4 {
+  font-family: Inter;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24.2px;
+  text-align: center;
+  color: #4D4D4D;
+}
+
+.formTitle > p {
+  font-family: Inter;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 19.28px;
+  text-align: center;
+  color: #ABABAB;
 }
