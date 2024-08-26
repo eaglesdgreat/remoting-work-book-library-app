@@ -90,6 +90,10 @@ function AuthForm<T> ({ content, setFormData, handleSubmit }: Props<T>) {
             <h4>Registration</h4>
             <p>For Both Staff & Students</p>
           </div>
+
+          <div className={styles.formContainer}>
+            <form></form>
+          </div>
         </div>
       </div>
     </>

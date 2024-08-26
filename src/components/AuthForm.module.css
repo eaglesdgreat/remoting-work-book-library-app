@@ -102,3 +102,11 @@ svg {
   text-align: center;
   color: #ABABAB;
 }
+
+.formContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  width: Hug (422px)px;
+  height: Hug (380px)px;
+  gap: 20px;
+}
