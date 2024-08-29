@@ -16,11 +16,10 @@ export function App(props: IProps) {
     <div>
       <input
         id="name"
-        type="text"
+        type={props.type}
         value={props.name}
         onChange={(e) => handleChange(e)}
-        required
-        className="px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        required={props.required}
       />
     </div>
   );
