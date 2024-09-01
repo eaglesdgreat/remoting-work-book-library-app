@@ -6,6 +6,7 @@ interface IProps {
   onChange: (event: string | number) => void;
   onFocus: (event: string | number) => void;
   required: boolean;
+  classes: string
 }
 
 export function App(props: IProps) {
@@ -26,6 +27,7 @@ export function App(props: IProps) {
         onChange={(e) => handleChange(e)}
         onFocus={(e) => handleFocus(e)}
         required={props.required}
+        className={props.classes}
       />
     </div>
   );
