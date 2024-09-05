@@ -26,7 +26,7 @@ export function App(props: IProps) {
   return (
     <div>
       <input
-        id="name"
+        id={props.name}
         type={props.type}
         value={props.name}
         onChange={(e) => handleChange(e)}
