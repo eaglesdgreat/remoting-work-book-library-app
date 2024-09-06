@@ -2,7 +2,8 @@ import { ChangeEvent } from "react";
 
 interface IProps {
   type: string;
-  name: string | number;
+  name: string;
+  value: string | number;
   onChange: (event: string | number) => void;
   onFocus: (event: string | number) => void;
   onBlur: (event: string | number) => void;
@@ -28,7 +29,7 @@ export function App(props: IProps) {
       <input
         id={props.name}
         type={props.type}
-        value={props.name}
+        value={props.value}
         onChange={(e) => handleChange(e)}
         onFocus={(e) => handleFocus(e)}
         onBlur={(e) => handleBlur(e)}
