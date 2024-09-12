@@ -25,8 +25,8 @@ function AuthForm<T> ({ content, setFormData, handleSubmit }: Props<T>) {
       }
     }
 
-    // window.addEventListener('resize', scaleSVG);
-    // scaleSVG();
+    window.addEventListener('resize', scaleSVG);
+    scaleSVG();
 
     return () => {
       window.removeEventListener('resize', scaleSVG);
