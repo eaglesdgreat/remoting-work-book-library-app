@@ -1,7 +1,7 @@
 .shadow {
   position: absolute;
   left: 0;
-  top: 0;
+  top: -30px;
   /* -webkit-filter: drop-shadow(3px 15px 73px #FFB5B5);
   filter: drop-shadow(3px 15px 73px #FFB5B5); */
 }

@@ -11,30 +11,63 @@ interface IProps {
   classes: string
 }
 
-export function App(props: IProps) {
+export function InputText({
+  className,
+  label,
+  errors,
+  isError,
+  isSuccess,
+  helperText,
+  hideLabel = false,
+  name,
+  onChange,
+  onFocus,
+  onEnter,
+  onBlur,
+  required = false,
+  hasSlideUpLabel = false,
+  noNegativeValue = false,
+  showCC,
+  type = "text",
+  leftIcon,
+  rightIcon,
+  iconSpacing,
+  width,
+  height,
+  color,
+  background,
+  borderWidth,
+  borderColor,
+  borderStyle,
+  borderRadius,
+  classNames,
+  placeholder,
+  inputRef,
+  ...props
+}: IProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    props.onChange(e.target.value)
+    onChange(e.target.value)
   }
   
   const handleFocus = (e: ChangeEvent<HTMLInputElement>) => {
-    props.onFocus(e.target.value)
+    onFocus(e.target.value)
   }
 
   const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
-    props.onBlur(e.target.value)
+    onBlur(e.target.value)
   }
 
   return (
     <div>
       <input
-        id={props.name}
-        type={props.type}
+        id={name}
+        type={type}
         value={props.value}
         onChange={(e) => handleChange(e)}
         onFocus={(e) => handleFocus(e)}
         onBlur={(e) => handleBlur(e)}
-        required={props.required}
-        className={props.classes}
+        required={required}
+        className={className}
       />
     </div>
   );
